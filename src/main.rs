@@ -56,7 +56,8 @@ fn compress_image(input: &str, output: &str, format: &str) -> Result<(), String>
     let scaled = img.resize(400, 400, FilterType::Lanczos3);
     // Ensure the directory exists
     if let Some(parent) = output_path.parent() {
-        fs::create_dir_all(parent).map_err(|e| format!("Failed to create output directory: {}", e))?;
+        fs::create_dir_all(parent)
+            .map_err(|e| format!("Failed to create output directory: {}", e))?;
     }
 
     let file =
