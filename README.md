@@ -7,7 +7,7 @@ This is a simple image compressor written in Rust.
 To run the tests, use the following command:
 
 ```bash
-cargo test
+cargo test -- --test-threads=1
 ```
 
 ## Formatting
