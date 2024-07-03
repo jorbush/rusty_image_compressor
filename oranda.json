@@ -1,5 +1,0 @@
-{
-    "build": {
-        "path_prefix": "rusty_image_compressor"
-    }
-}
