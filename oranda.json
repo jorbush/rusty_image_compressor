@@ -1,6 +1,6 @@
 {
     "build": {
-        "path_prefix": ""
+        "path_prefix": "rusty_image_compressor"
     },
     "styles": {
         "theme": "hacker"
