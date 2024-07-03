@@ -1,5 +1,6 @@
 {
-    "build": {
-        "path_prefix": "rusty_image_compressor"
+    "styles": {
+        "theme": "axodark",
+        "favicon": "https://www.axo.dev/favicon.ico"
     }
 }
