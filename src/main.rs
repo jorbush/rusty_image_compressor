@@ -19,14 +19,6 @@ fn main() {
                 .required(true),
         )
         .arg(
-            Arg::new("output")
-                .short('o')
-                .long("output")
-                .value_name("FILE")
-                .help("Sets the output image file")
-                .required(true),
-        )
-        .arg(
             Arg::new("format")
                 .short('f')
                 .long("format")
@@ -37,10 +29,10 @@ fn main() {
         .get_matches();
 
     let input = matches.get_one::<String>("input").unwrap();
-    let output = matches.get_one::<String>("output").unwrap();
-    let format = matches.get_one::<String>("format").unwrap();
+    let format = matches.get_one::<String>("format").unwrap().to_lowercase();
+    let output = input.replace(".", &format!("_compressed.{}", format));
 
-    match compress_image(input, output, format) {
+    match compress_image(input, &output, &format) {
         Ok(_) => println!("Image compressed successfully!"),
         Err(e) => eprintln!("Error compressing image: {}", e),
     }
