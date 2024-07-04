@@ -27,11 +27,12 @@ fn main() {
                 .required(true),
         )
         .get_matches();
-
     let input = matches.get_one::<String>("input").unwrap();
     let format = matches.get_one::<String>("format").unwrap().to_lowercase();
-    let output = input.replace(".", &format!("_compressed.{}", format));
-
+    let output = input.replace(
+        &input[input.find('.').unwrap() as usize..],
+        &format!("_compressed.{}", format),
+    );
     match compress_image(input, &output, &format) {
         Ok(_) => println!("Image compressed successfully!"),
         Err(e) => eprintln!("Error compressing image: {}", e),
@@ -42,20 +43,16 @@ fn compress_image(input: &str, output: &str, format: &str) -> Result<(), String>
     let input_size = std::fs::metadata(input)
         .map_err(|e| format!("Failed to get input file metadata: {}", e))?
         .len();
-
     let img = image::open(&Path::new(input)).map_err(|e| format!("Failed to open image: {}", e))?;
     let output_path = Path::new(output);
     let scaled = img.resize(400, 400, FilterType::Lanczos3);
-    // Ensure the directory exists
     if let Some(parent) = output_path.parent() {
         fs::create_dir_all(parent)
             .map_err(|e| format!("Failed to create output directory: {}", e))?;
     }
-
     let file =
         File::create(output_path).map_err(|e| format!("Failed to create output file: {}", e))?;
     let ref mut w = BufWriter::new(file);
-
     match format {
         "jpeg" => scaled
             .write_to(w, ImageFormat::Jpeg)
@@ -75,12 +72,11 @@ fn compress_image(input: &str, output: &str, format: &str) -> Result<(), String>
     println!("Compressed size: {} bytes", output_size);
     let reduction = input_size - output_size;
     let reduction_percentage = (reduction as f64 / input_size as f64) * 100.0;
-
     println!("Image compressed successfully!");
     println!("Original size: {} bytes", input_size);
     println!("Compressed size: {} bytes", output_size);
     println!("Reduction: {} bytes ({}%)", reduction, reduction_percentage);
-
+    println!("Your compressed file is in {}", output);
     Ok(())
 }
 
